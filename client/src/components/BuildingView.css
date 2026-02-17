@@ -1,0 +1,136 @@
+.building-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+.building-header {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.quick-links a {
+    margin-left: 10px;
+    font-size: 0.9rem;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.shaft-container {
+    position: relative;
+    width: 200px;
+    border: 4px solid #333;
+    background: #f0f0f0;
+    /* Determine height based on floors or make it scrollable/fit */
+    /* For now, let's just let it grow and handle overflow if too big, or scale it */
+    display: flex;
+    flex-direction: column;
+}
+
+.floors-layer {
+    display: flex;
+    flex-direction: column;
+}
+
+.floor-level {
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    position: relative;
+}
+
+.floor-label {
+    font-weight: bold;
+    color: #555;
+    position: absolute;
+    left: -40px;
+}
+
+.floor-door-frame {
+    width: 80px;
+    height: 90%;
+    border: 1px solid #999;
+    background: #ccc;
+    margin: 0 auto;
+}
+
+/* Elevator Car */
+.elevator-car {
+    position: absolute;
+    left: 10%;
+    /* Center in shaft */
+    width: 80%;
+    background: #4a90e2;
+    border: 2px solid #2a60a2;
+    box-sizing: border-box;
+    display: flex;
+    overflow: hidden;
+    /* Hide doors when open */
+    z-index: 10;
+}
+
+.car-interior {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.5rem;
+    z-index: 1;
+    /* Behind doors */
+}
+
+.elevator-door {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background: silver;
+    border: 1px solid #999;
+    z-index: 2;
+    transition: width 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.elevator-door.left {
+    left: 0;
+    border-right: 1px solid #777;
+}
+
+.elevator-door.right {
+    right: 0;
+    border-left: 1px solid #777;
+}
+
+/* Door States */
+.elevator-door.left.OPEN,
+.elevator-door.left.OPENING {
+    transform: translateX(-80%);
+}
+
+.elevator-door.right.OPEN,
+.elevator-door.right.OPENING {
+    transform: translateX(80%);
+}
+
+.elevator-door.left.CLOSED,
+.elevator-door.left.CLOSING {
+    transform: translateX(0);
+}
+
+.elevator-door.right.CLOSED,
+.elevator-door.right.CLOSING {
+    transform: translateX(0);
+}
