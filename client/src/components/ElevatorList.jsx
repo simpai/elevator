@@ -61,7 +61,8 @@ function ElevatorList() {
                         <p>Status: {elevator.direction} | Gap: {elevator.doorState}</p>
                         <div className="actions">
                             <Link to={`/building/${elevator.id}`}>View Building</Link>
-                            <Link to={`/internal/${elevator.id}`}>Internal Panel</Link>
+                            <Link to={`/internal/${elevator.id}`}>Internal</Link>
+                            <Link to={`/internal-ex/${elevator.id}`}>Internal-EX</Link>
                             <Link to={`/display/${elevator.id}`}>Display</Link>
                             <button
                                 onClick={() => setDefault(elevator.id)}

@@ -3,6 +3,7 @@ import ElevatorList from './components/ElevatorList';
 import BuildingView from './components/BuildingView';
 import ExternalPanel from './components/panels/ExternalPanel';
 import InternalPanel from './components/panels/InternalPanel';
+import InternalExPanel from './components/panels/InternalExPanel';
 import DisplayPanel from './components/panels/DisplayPanel';
 import './App.css';
 
@@ -15,6 +16,7 @@ function App() {
           <Route path="/building/:id" element={<BuildingView />} />
           <Route path="/external/:id/:floor" element={<ExternalPanel />} />
           <Route path="/internal/:id" element={<InternalPanel />} />
+          <Route path="/internal-ex/:id" element={<InternalExPanel />} />
           <Route path="/display/:id" element={<DisplayPanel />} />
         </Routes>
       </div>

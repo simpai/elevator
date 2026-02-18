@@ -21,7 +21,9 @@
     width: 100vw;
     height: 100vh;
     margin: 0;
-    padding: 0;
+    padding: 20px 0;
+    /* Add top/bottom padding */
+    box-sizing: border-box;
     max-width: none;
     border-radius: 0;
     overflow: hidden;
@@ -201,15 +203,12 @@
 .external-controls-metal {
     display: flex;
     flex-direction: column;
-    gap: 4vmin;
+    gap: 2vh;
     align-items: center;
     justify-content: center;
     flex-grow: 1;
     width: 100%;
-    height: 100%;
-    /* Force fill */
-    overflow: hidden;
-    /* No scroll */
+    margin-bottom: 5vh;
 }
 
 .call-btn-metal {
@@ -241,14 +240,17 @@
 }
 
 .floor-label-metal {
-    font-size: 5vmin;
+    font-size: 6vmin;
     font-weight: bold;
     color: #555;
-    margin-top: 20px;
+    margin: 0 0 1vh 0;
+    /* Very small bottom margin to stay close to controls */
+    z-index: 5;
 }
 
 /* LED Display Shared */
 .led-display {
+    font-size: 6rem;
     background: #000;
     border: 4px solid #444;
     padding: 2vmin 4vmin;
@@ -261,13 +263,20 @@
     flex-shrink: 0;
 }
 
+
+.led-display.small {
+    font-size: 5rem;
+    transform-origin: top;
+    /* Increased bottom margin significantly */
+}
+
 .led-display.large {
-    transform: scale(2);
-    margin-top: -100px;
+    font-size: 9rem;
+    transform-origin: top;
+    /* Increased bottom margin significantly */
 }
 
 .floor-indicator {
-    font-size: 5rem;
     color: #ffaa00;
     font-weight: bold;
     text-shadow: 0 0 10px #ffaa00;
@@ -368,4 +377,43 @@
 .arrows-container {
     display: flex;
     gap: 10vmin;
+}
+
+/* Floor Navigation Buttons */
+.nav-floor-btn {
+    position: absolute;
+    bottom: 20px;
+    width: 12vmin;
+    height: 12vmin;
+    max-width: 80px;
+    max-height: 80px;
+    border-radius: 15%;
+    background: linear-gradient(145deg, #f0f0f0, #cacaca);
+    border: 2px solid #bbb;
+    box-shadow: 0.5vmin 0.5vmin 1vmin #bebebe, -0.5vmin -0.5vmin 1vmin #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #cc5500;
+    cursor: pointer;
+    outline: none;
+    z-index: 100;
+}
+
+.nav-floor-btn:active {
+    box-shadow: inset 5px 5px 10px #bebebe, inset -5px -5px 10px #ffffff;
+}
+
+.nav-floor-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.nav-floor-btn.prev {
+    left: 20px;
+}
+
+.nav-floor-btn.next {
+    right: 20px;
 }

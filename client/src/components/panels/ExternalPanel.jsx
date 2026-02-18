@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import socket from '../../socket';
 import './Panels.css';
 
 function ExternalPanel() {
     const { id, floor } = useParams();
+    const navigate = useNavigate();
     const floorNum = parseInt(floor, 10);
     const [elevator, setElevator] = useState(null);
 
@@ -34,6 +35,11 @@ function ExternalPanel() {
         socket.emit('call_elevator', { id: realId, floor: floorNum, direction });
     };
 
+    const navigateToFloor = (newFloor) => {
+        if (newFloor < 1 || (elevator && newFloor > elevator.totalFloors)) return;
+        navigate(`/external/${id}/${newFloor}`);
+    };
+
     if (!elevator) return <div className="panel-container">Loading...</div>;
 
     const isUpActive = elevator.requests.some(r => r.floor === floorNum && r.direction === 'UP');
@@ -41,10 +47,14 @@ function ExternalPanel() {
 
     return (
         <div className="panel-container internal-metal">
-            <div className="led-display">
+            <div className="led-display large">
                 <span className="floor-indicator">{elevator.currentFloor}</span>
                 <span className={`direction-arrow ${elevator.direction === 'UP' ? 'active' : ''}`}>▲</span>
                 <span className={`direction-arrow ${elevator.direction === 'DOWN' ? 'active' : ''}`}>▼</span>
+            </div>
+
+            <div className="floor-label-metal">
+                {floorNum}F
             </div>
 
             <div className="external-controls-metal">
@@ -73,9 +83,20 @@ function ExternalPanel() {
                 </div>
             </div>
 
-            <div className="floor-label-metal">
-                {floorNum}F
-            </div>
+            <button
+                className="nav-floor-btn prev"
+                onClick={() => navigateToFloor(floorNum - 1)}
+                disabled={floorNum <= 1}
+            >
+                ◀
+            </button>
+            <button
+                className="nav-floor-btn next"
+                onClick={() => navigateToFloor(floorNum + 1)}
+                disabled={floorNum >= elevator.totalFloors}
+            >
+                ▶
+            </button>
         </div>
     );
 }
