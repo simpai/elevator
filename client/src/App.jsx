@@ -12,10 +12,10 @@ function App() {
       <div className="app-container">
         <Routes>
           <Route path="/" element={<ElevatorList />} />
-          <Route path="/elevator/:id" element={<BuildingView />} />
-          <Route path="/elevator/:id/external/:floor" element={<ExternalPanel />} />
-          <Route path="/elevator/:id/internal" element={<InternalPanel />} />
-          <Route path="/elevator/:id/display" element={<DisplayPanel />} />
+          <Route path="/building/:id" element={<BuildingView />} />
+          <Route path="/external/:id/:floor" element={<ExternalPanel />} />
+          <Route path="/internal/:id" element={<InternalPanel />} />
+          <Route path="/display/:id" element={<DisplayPanel />} />
         </Routes>
       </div>
     </Router>

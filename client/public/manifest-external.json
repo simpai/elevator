@@ -1,0 +1,23 @@
+{
+  "name": "Elevator External Panel",
+  "short_name": "External",
+  "description": "External call buttons for the Elevator Simulator",
+  "theme_color": "#222222",
+  "background_color": "#222222",
+  "display": "standalone",
+  "scope": "/external/",
+  "start_url": "/external/default/1",
+  "icons": [
+    {
+      "src": "icon-external.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-external.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

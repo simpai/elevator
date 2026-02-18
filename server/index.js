@@ -20,42 +20,66 @@ const io = new Server(server, {
 });
 
 const elevators = new Map();
+let defaultElevatorId = null;
 
 // Helper to broadcast state
 const broadcastState = () => {
     const states = Array.from(elevators.values()).map(e => e.getState());
-    io.emit('elevator_update', states);
+
+    // Auto-set default if empty or only one exists
+    if (elevators.size > 0 && (!defaultElevatorId || !elevators.has(defaultElevatorId))) {
+        defaultElevatorId = Array.from(elevators.keys())[0];
+    }
+    if (elevators.size === 0) defaultElevatorId = null;
+
+    io.emit('elevator_update', {
+        elevators: states,
+        defaultElevatorId
+    });
 };
 
-// Periodic update loop (optional, if we want to sync frequently regardless of events)
+// Periodic update loop
 setInterval(broadcastState, 500);
 
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
-    // Send initial state
-    socket.emit('elevator_update', Array.from(elevators.values()).map(e => e.getState()));
+    // Send initial state via explicit update
+    broadcastState();
 
     // Create Elevator
     socket.on('create_elevator', (floors) => {
         const id = Date.now().toString();
         const elevator = new Elevator(id, floors);
         elevators.set(id, elevator);
+        if (!defaultElevatorId) defaultElevatorId = id;
         broadcastState();
     });
 
     // Delete Elevator
     socket.on('delete_elevator', (id) => {
-        elevators.delete(id);
-        broadcastState();
+        if (id === defaultElevatorId && elevators.size > 1) {
+            // Can't delete default if others exist, or user should change default first
+            // But per request: "디폴트 엘리베이터는 삭제할 수 없게"
+            return;
+        }
+        if (elevators.size > 1 || id !== defaultElevatorId) {
+            elevators.delete(id);
+            broadcastState();
+        }
+    });
+
+    // Set Default
+    socket.on('set_default_elevator', (id) => {
+        if (elevators.has(id)) {
+            defaultElevatorId = id;
+            broadcastState();
+        }
     });
 
     // Request State (Explicit)
     socket.on('request_state', (id) => {
-        // Just broadcast to everyone or send back to sender?
-        // For simplicity, broadcast or just emit to sender.
-        // Let's emit all elevators state to sender
-        socket.emit('elevator_update', Array.from(elevators.values()).map(e => e.getState()));
+        broadcastState();
     });
 
 

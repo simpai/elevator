@@ -1,15 +1,45 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" href="/pwa-192x192.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#222222" />
-    <title>Elevator Simulator</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <script>
+    (function () {
+      const path = window.location.pathname;
+      let manifest = '/manifest.json';
+      let icon = '/pwa-192x192.png';
+
+      if (path.startsWith('/internal')) {
+        manifest = '/manifest-internal.json';
+        icon = '/icon-internal.png';
+      } else if (path.startsWith('/external')) {
+        manifest = '/manifest-external.json';
+        icon = '/icon-external.png';
+      } else if (path.startsWith('/display')) {
+        manifest = '/manifest-display.json';
+        icon = '/icon-display.png';
+      }
+
+      const linkManifest = document.createElement('link');
+      linkManifest.rel = 'manifest';
+      linkManifest.href = manifest;
+      document.head.appendChild(linkManifest);
+
+      const linkAppleIcon = document.createElement('link');
+      linkAppleIcon.rel = 'apple-touch-icon';
+      linkAppleIcon.href = icon;
+      document.head.appendChild(linkAppleIcon);
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#222222" />
+  <title>Elevator Simulator</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>

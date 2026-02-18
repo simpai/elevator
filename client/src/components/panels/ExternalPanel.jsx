@@ -8,18 +8,30 @@ function ExternalPanel() {
     const floorNum = parseInt(floor, 10);
     const [elevator, setElevator] = useState(null);
 
+    const [realId, setRealId] = useState(id === 'default' ? null : id);
+
     useEffect(() => {
-        socket.emit('request_state', id);
+        socket.emit('request_state');
         const handleUpdate = (data) => {
-            const target = data.find(e => e.id === id);
-            if (target) setElevator(target);
+            const currentElevators = data.elevators || data;
+            const defaultId = data.defaultElevatorId;
+
+            const targetId = id === 'default' ? defaultId : id;
+            if (targetId) {
+                const target = currentElevators.find(e => e.id === targetId);
+                if (target) {
+                    setRealId(targetId);
+                    setElevator(target);
+                }
+            }
         };
         socket.on('elevator_update', handleUpdate);
         return () => socket.off('elevator_update', handleUpdate);
     }, [id]);
 
     const handleCall = (direction) => {
-        socket.emit('call_elevator', { id, floor: floorNum, direction });
+        if (!realId) return;
+        socket.emit('call_elevator', { id: realId, floor: floorNum, direction });
     };
 
     if (!elevator) return <div className="panel-container">Loading...</div>;
@@ -29,11 +41,6 @@ function ExternalPanel() {
 
     return (
         <div className="panel-container internal-metal">
-            <div className="panel-screw top-left">+</div>
-            <div className="panel-screw top-right">+</div>
-            <div className="panel-screw bottom-left">+</div>
-            <div className="panel-screw bottom-right">+</div>
-
             <div className="led-display">
                 <span className="floor-indicator">{elevator.currentFloor}</span>
                 <span className={`direction-arrow ${elevator.direction === 'UP' ? 'active' : ''}`}>▲</span>

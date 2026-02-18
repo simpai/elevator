@@ -1,0 +1,23 @@
+{
+    "name": "Elevator Display",
+    "short_name": "Display",
+    "description": "Real-time elevator status display",
+    "theme_color": "#222222",
+    "background_color": "#222222",
+    "display": "standalone",
+    "scope": "/display/",
+    "start_url": "/display/default",
+    "icons": [
+        {
+            "src": "icon-display.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icon-display.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

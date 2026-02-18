@@ -7,11 +7,22 @@ function DisplayPanel() {
     const { id } = useParams();
     const [elevator, setElevator] = useState(null);
 
+    const [realId, setRealId] = useState(id === 'default' ? null : id);
+
     useEffect(() => {
-        socket.emit('request_state', id);
+        socket.emit('request_state');
         const handleUpdate = (data) => {
-            const target = data.find(e => e.id === id);
-            if (target) setElevator(target);
+            const currentElevators = data.elevators || data;
+            const defaultId = data.defaultElevatorId;
+
+            const targetId = id === 'default' ? defaultId : id;
+            if (targetId) {
+                const target = currentElevators.find(e => e.id === targetId);
+                if (target) {
+                    setRealId(targetId);
+                    setElevator(target);
+                }
+            }
         };
         socket.on('elevator_update', handleUpdate);
         return () => socket.off('elevator_update', handleUpdate);

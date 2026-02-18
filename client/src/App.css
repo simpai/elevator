@@ -45,7 +45,7 @@
   border: 1px solid #ddd;
   padding: 1rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .elevator-card .actions {
@@ -70,4 +70,23 @@
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.elevator-card.default-elevator {
+  border: 2px solid #ffaa00;
+  background: #fffdf5;
+}
+
+.actions .default-btn {
+  background: #ffaa00;
+  color: white;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.actions button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
 }

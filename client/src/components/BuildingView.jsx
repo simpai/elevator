@@ -7,24 +7,40 @@ function BuildingView() {
     const { id } = useParams();
     const [elevator, setElevator] = useState(null);
     const lastDoorState = useRef('CLOSED');
+    const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+
+    useEffect(() => {
+        const handleResize = () => setWindowHeight(window.innerHeight);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const [realId, setRealId] = useState(id === 'default' ? null : id);
 
     useEffect(() => {
         // Request initial state
-        socket.emit('request_state', id);
+        socket.emit('request_state');
 
         const handleUpdate = (data) => {
-            const target = data.find(e => e.id === id);
-            if (target) {
-                setElevator(target);
+            const currentElevators = data.elevators || data;
+            const defaultId = data.defaultElevatorId;
 
-                // TTS Logic
-                if (target.doorState !== lastDoorState.current) {
-                    if (target.doorState === 'OPENING' && lastDoorState.current !== 'OPENING') {
-                        speak('문이 열립니다');
-                    } else if (target.doorState === 'CLOSING' && lastDoorState.current !== 'CLOSING') {
-                        speak('문이 닫힙니다');
+            const targetId = id === 'default' ? defaultId : id;
+            if (targetId) {
+                const target = currentElevators.find(e => e.id === targetId);
+                if (target) {
+                    setRealId(targetId);
+                    setElevator(target);
+
+                    // TTS Logic
+                    if (target.doorState !== lastDoorState.current) {
+                        if (target.doorState === 'OPENING' && lastDoorState.current !== 'OPENING') {
+                            speak('문이 열립니다');
+                        } else if (target.doorState === 'CLOSING' && lastDoorState.current !== 'CLOSING') {
+                            speak('문이 닫힙니다');
+                        }
+                        lastDoorState.current = target.doorState;
                     }
-                    lastDoorState.current = target.doorState;
                 }
             }
         };
@@ -46,8 +62,12 @@ function BuildingView() {
 
     if (!elevator) return <div className="loading">Loading Elevator {id}...</div>;
 
-    const floorHeight = 60; // px
-    const elevatorBottom = (elevator.currentFloor - 1) * floorHeight;
+    // Dynamically calculate floor height to fit all floors on one screen
+    const headerHeight = 100; // Reduced to give more space
+    const availableHeight = windowHeight - headerHeight - 20;
+    const floorHeight = availableHeight / (elevator?.totalFloors || 10);
+    const elevatorBottom = ((elevator?.currentFloor || 1) - 1) * floorHeight;
+    const labelFontSize = Math.max(6, Math.min(20, floorHeight * 0.6));
 
     return (
         <div className="building-container">
@@ -55,9 +75,9 @@ function BuildingView() {
                 <Link to="/" className="back-link">← Dashboard</Link>
                 <h2>Elevator {elevator.id}</h2>
                 <div className="quick-links">
-                    <Link to={`/elevator/${id}/internal`} target="_blank">Internal Panel ↗</Link>
-                    <Link to={`/elevator/${id}/display`} target="_blank">Display ↗</Link>
-                    <Link to={`/elevator/${id}/external/1`} target="_blank">Ext. Floor 1 ↗</Link>
+                    <Link to={`/internal/${realId}`} target="_blank">Internal Panel ↗</Link>
+                    <Link to={`/display/${realId}`} target="_blank">Display ↗</Link>
+                    <Link to={`/external/${realId}/1`} target="_blank">Ext. Floor 1 ↗</Link>
                 </div>
             </div>
 
@@ -67,8 +87,10 @@ function BuildingView() {
                         const floorNum = elevator.totalFloors - i;
                         return (
                             <div key={floorNum} className="floor-level" style={{ height: floorHeight }}>
-                                <span className="floor-label">{floorNum}F</span>
-                                <div className="floor-door-frame"></div>
+                                <span className="floor-label" style={{ fontSize: labelFontSize, visibility: labelFontSize < 8 ? 'hidden' : 'visible' }}>
+                                    {floorNum}F
+                                </span>
+                                <div className="floor-door-frame" style={{ height: '80%' }}></div>
                             </div>
                         );
                     })}

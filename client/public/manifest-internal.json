@@ -1,0 +1,23 @@
+{
+  "name": "Elevator Internal Panel",
+  "short_name": "Internal",
+  "description": "Internal controls for the Elevator Simulator",
+  "theme_color": "#222222",
+  "background_color": "#222222",
+  "display": "standalone",
+  "scope": "/internal/",
+  "start_url": "/internal/default",
+  "icons": [
+    {
+      "src": "icon-internal.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-internal.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
