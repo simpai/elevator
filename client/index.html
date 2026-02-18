@@ -10,7 +10,10 @@
       let manifest = '/manifest.json';
       let icon = '/pwa-192x192.png';
 
-      if (path.startsWith('/internal')) {
+      if (path.startsWith('/internal-ex')) {
+        manifest = '/manifest-internal-ex.json';
+        icon = '/icon-internal-ex.png';
+      } else if (path.startsWith('/internal')) {
         manifest = '/manifest-internal.json';
         icon = '/icon-internal.png';
       } else if (path.startsWith('/external')) {
