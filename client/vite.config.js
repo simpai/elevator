@@ -7,33 +7,12 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: null,
       includeAssets: ['favicon.ico', 'pwa-192x192.png', 'pwa-512x512.png'],
-      manifest: {
-        name: 'Elevator Simulator',
-        short_name: 'Elevator',
-        description: 'Advanced Real-time Elevator Simulation',
-        theme_color: '#222222',
-        background_color: '#222222',
-        display: 'standalone',
-        icons: [
-          {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
-          },
-          {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable'
-          }
-        ]
-      }
+      manifest: false,
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,ttf,woff,woff2}'],
+      },
     })
   ],
 })
