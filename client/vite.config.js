@@ -12,11 +12,7 @@ export default defineConfig({
       manifest: false,
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,ttf,woff,woff2}'],
-        minify: false,
       },
     })
   ],
-  build: {
-    minify: 'esbuild',
-  },
 })
